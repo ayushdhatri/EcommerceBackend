@@ -19,6 +19,10 @@ public class Category {
         return this.categoryId;
     }
 
+    public void setCategoryId(Long id){
+        this.categoryId = id;
+    }
+
     public void setCategoryName(String categoryName){
         this.categoryName = categoryName;
     }
