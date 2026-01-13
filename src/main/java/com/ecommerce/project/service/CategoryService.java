@@ -10,5 +10,6 @@ public interface CategoryService {
     List<Category> getAllCategoreis();
     void createCategory(Category category);
     String deleteCategory(Long id);
+    Category updateCategory(Category category, Long id);
 
 }
