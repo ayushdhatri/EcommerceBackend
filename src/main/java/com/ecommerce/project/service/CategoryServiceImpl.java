@@ -31,27 +31,24 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public String deleteCategory(Long id) {
-        List<Category> categories = categoryRepository.findAll();
-        Category category = categories.stream()
-                .filter(c -> c.getCategoryId().equals(id))
-                .findFirst().orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource Not Found"));
-        if(category == null){
+        Optional<Category> categoryOptional = categoryRepository.findById(id);
+        Category toBeDeletedCategory = categoryOptional.orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource Not found"));
+
+        if(toBeDeletedCategory == null){
             return "Category with id " + id + "not found";
         }
-        categoryRepository.delete(category);
+        categoryRepository.delete(toBeDeletedCategory);
         return "Category with category id {}" + id + "deleted";
     }
 
     @Override
     public Category updateCategory(Category category, Long id) {
-            List<Category> categories = categoryRepository.findAll();
-           Optional<Category> savedCategory = categories.stream()
-                   .filter(c -> c.getCategoryId().equals(id))
-                   .findFirst();
-           if(savedCategory.isPresent()) {
+           Optional<Category> savedCategoryOptinoal = categoryRepository.findById(id);
+           Category savedCategory = savedCategoryOptinoal.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource  with id not found"));
 
-               savedCategory.get().setCategoryName(category.getCategoryName());
-               return categoryRepository.save(savedCategory.get());
+           if(savedCategory != null) {
+               savedCategory.setCategoryName(category.getCategoryName());
+               return categoryRepository.save(savedCategory);
            }
            else{
                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource Not Found");
