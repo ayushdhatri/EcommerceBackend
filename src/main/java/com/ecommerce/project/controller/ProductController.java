@@ -20,7 +20,7 @@ public class ProductController {
     }
 
     @PostMapping("/admin/categories/{categoryId}/products")
-    public ResponseEntity<ProductDTO> addProduct(@RequestBody Product product,
+    public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductDTO product,
                                                  @PathVariable Long categoryId){
         ProductDTO addedProductDTO = productService.addProduct(categoryId, product);
         return new ResponseEntity<ProductDTO>(addedProductDTO, HttpStatus.CREATED);
