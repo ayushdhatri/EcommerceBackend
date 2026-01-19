@@ -34,5 +34,13 @@ public class ProductController {
     @GetMapping("/public/{categoryId}/products")
     public ResponseEntity<ProductResponse> getProductsByCategory(@PathVariable Long categoryId){
         ProductResponse productResponse = productService.getProductsByCategory(categoryId);
+        return new ResponseEntity<ProductResponse>(productResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/public/products/keyword/{keyword}")
+    public ResponseEntity<ProductResponse> getProductByKeyword(@PathVariable String keyword){
+        ProductResponse productResponse = productService.getProductsByKeyword(keyword);
+        return new ResponseEntity<>(productResponse,HttpStatus.OK);
+
     }
 }
