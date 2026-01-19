@@ -1,0 +1,88 @@
+✅ What relationship is this?
+
+In your Product entity:
+
+@ManyToOne
+@JoinColumn(name = "category_id")
+private Category category;
+
+
+This means:
+
+Many Products belong to One Category
+
+➡️ Many-to-One relationship (Product → Category)
+
+✅ Real-life meaning (very clear)
+
+Example:
+
+Category = "Electronics"
+
+Products inside it:
+
+iPhone
+
+Laptop
+
+Headphones
+
+Charger
+
+So:
+
+One category can have many products
+
+But each product can have only one category
+
+✅ How it looks in Database (Tables)
+categories table
+category_id	category_name
+1	Electronics
+2	Fashion
+product table
+product_id	product_name	category_id
+10	iPhone	1
+11	Laptop	1
+12	Shirt	2
+
+So the column:
+
+@JoinColumn(name = "category_id")
+
+
+creates a foreign key in Product table.
+
+✅ product.category_id references categories.category_id
+
+✅ Relationship Direction: Unidirectional
+
+Right now, only Product knows about Category:
+
+Product → Category ✅
+
+Category → Products ❌ (not present)
+
+So this relationship is unidirectional.
+
+If you want Bidirectional relationship (optional)
+
+If you want Category also to know which products it has, add this in Category:
+
+@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+private List<Product> products = new ArrayList<>();
+
+
+Then it becomes:
+
+✅ Category ↔ Products (Bidirectional)
+
+Summary
+
+✅ Your relationship is:
+
+Product (Many) → Category (One)
+
+and DB wise:
+
+Product table contains category_id as foreign key.
