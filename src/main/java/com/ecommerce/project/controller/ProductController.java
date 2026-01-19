@@ -31,6 +31,7 @@ public class ProductController {
         ProductResponse productResponse = productService.getAllProducts();
         return new ResponseEntity<ProductResponse>(productResponse, HttpStatus.OK);
     }
+
     @GetMapping("/public/{categoryId}/products")
     public ResponseEntity<ProductResponse> getProductsByCategory(@PathVariable Long categoryId){
         ProductResponse productResponse = productService.getProductsByCategory(categoryId);
@@ -41,6 +42,11 @@ public class ProductController {
     public ResponseEntity<ProductResponse> getProductByKeyword(@PathVariable String keyword){
         ProductResponse productResponse = productService.getProductsByKeyword(keyword);
         return new ResponseEntity<>(productResponse,HttpStatus.OK);
+    }
 
+    @PostMapping("/products/{productId}")
+    public ResponseEntity<ProductDTO> updateProductWithId(@RequestBody ProductDTO product, @PathVariable Long productId){
+        ProductDTO productDTO = productService.updateProduct(productId,product);
+        return new ResponseEntity<ProductDTO>(productDTO, HttpStatus.OK);
     }
 }
