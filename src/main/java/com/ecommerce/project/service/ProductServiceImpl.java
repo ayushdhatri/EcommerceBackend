@@ -14,6 +14,10 @@ import com.ecommerce.project.service.ImageStorage.MultipartUploadStrategy;
 import com.ecommerce.project.payload.StoredImage;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -65,9 +69,14 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ProductResponse getAllProducts(){
+    public ProductResponse getAllProducts(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder){
         // if product size is 0 you can create some
-      List<Product> savedProduct = productRepository.findAll();
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+
+        Page<Product> productPage = productRepository.findAll(pageDetails);
+      List<Product> savedProduct = productPage.getContent();
       List<ProductDTO> savedProductDTO = savedProduct.stream().map((product) -> {
           return modelMapper.map(product, ProductDTO.class);
       }).toList();
@@ -77,11 +86,16 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ProductResponse getProductsByCategory(Long categoryId) {
+    public ProductResponse getProductsByCategory(Long categoryId,Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(()-> new ResourceNotFoundException("Category", "categoryId", categoryId));
 
-        List<Product> savedProduct = productRepository.getProductByCategoryOrderByPriceAsc(category);
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+
+        Page<Product> productPage = productRepository.getProductByCategoryOrderByPriceAsc(category,pageDetails);
+        List<Product> savedProduct = productPage.getContent() ;
         List<ProductDTO> savedProductDTO = savedProduct.stream()
                 .map((product) -> {
                     return modelMapper.map(product, ProductDTO.class);
@@ -94,7 +108,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ProductResponse getProductsByKeyword(String keyword) {
+    public ProductResponse getProductsByKeyword(String keyword,Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
         List<Product> savedProduct = productRepository.findByProductNameLikeIgnoreCase('%' + keyword + '%');
         List<ProductDTO> productsHavingKeyword  = savedProduct.stream()
                 .map((product) -> {
