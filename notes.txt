@@ -86,3 +86,6 @@ Product (Many) → Category (One)
 and DB wise:
 
 Product table contains category_id as foreign key.
+
+
+We will see how we upload image on the backend server......
