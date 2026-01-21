@@ -1,5 +1,6 @@
 package com.ecommerce.project.service;
 
+import com.ecommerce.project.exception.APIException;
 import com.ecommerce.project.exception.ResourceNotFoundException;
 import com.ecommerce.project.model.Category;
 import com.ecommerce.project.model.Product;
@@ -40,8 +41,20 @@ public class ProductServiceImpl implements ProductService{
     }
     @Override
     public ProductDTO addProduct(Long categoryId, ProductDTO productDTO) {
+        // check if product already present or not
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(()-> new ResourceNotFoundException("Category", "categoryId", categoryId));
+        boolean isProductNotPresent = true;
+        List<Product> products = category.getProducts();
+        for (Product value : products) {
+            if (value.getProductName().equals(productDTO.getProductName())) {
+                isProductNotPresent = false;
+                break;
+            }
+        }
+        if(!isProductNotPresent){
+            throw new APIException("Product Already exist");
+        }
         Product product = modelMapper.map(productDTO, Product.class);
         product.setCategory(category);
         product.setSpecialPrice(product.getPrice() - product.getDiscount() * 0.01 * product.getPrice());
@@ -53,6 +66,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public ProductResponse getAllProducts(){
+        // if product size is 0 you can create some
       List<Product> savedProduct = productRepository.findAll();
       List<ProductDTO> savedProductDTO = savedProduct.stream().map((product) -> {
           return modelMapper.map(product, ProductDTO.class);

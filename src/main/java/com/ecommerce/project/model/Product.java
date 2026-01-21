@@ -2,13 +2,18 @@ package com.ecommerce.project.model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
+    @NotBlank
     private String productName;
+    @NotBlank
+    @Size(min = 6, message = "Product description must contain least 6 characters")
     private String description;
     private String image;
     private Integer quantity;
