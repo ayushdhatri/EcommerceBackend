@@ -89,3 +89,94 @@ Product table contains category_id as foreign key.
 
 
 We will see how we upload image on the backend server......
+
+In a production e-commerce Spring Boot app, product images are usually handled in a way that is:
+
+✅ scalable
+✅ cheap
+✅ fast to serve globally
+✅ safe (virus scan / validation)
+✅ doesn’t bloat your database
+
+So instead of storing images inside DB or server folder, we store them in object storage (S3 / GCS / Azure Blob / MinIO) and in DB we store only metadata + URL.
+
+✅ Recommended Production Architecture (Most Common)
+Upload flow
+
+Admin selects product images (UI)
+
+UI calls backend → asks for upload permission
+
+Backend generates secure upload method:
+
+either Pre-signed URL
+
+or backend accepts multipart and uploads to S3
+
+Image stored in S3 bucket (or equivalent)
+
+DB stores:
+
+productId
+
+image URL
+
+image type (thumbnail / main / gallery)
+
+order index
+
+file size, content type
+
+Frontend loads images via CDN / direct URL
+
+✅ What NOT to do in production
+❌ storing in DB as BLOB
+
+DB grows huge fast
+
+slows backup/restore
+
+expensive I/O
+
+hard CDN caching
+
+❌ storing in local folder on server
+
+breaks when multiple servers run (load balancer)
+
+breaks after redeploy
+
+no CDN
+
+scaling nightmare
+
+✅ Best 2 Approaches
+Approach A) Pre-signed URL Upload (Best for Production)
+
+This is how Amazon/Flipkart-like systems do.
+
+Steps
+
+1) Frontend asks backend: “I want to upload abc.jpg for product 101”
+2) Backend generates pre-signed PUT URL
+3) Frontend uploads directly to S3
+4) Frontend calls backend: “upload done, save URL”
+
+✅ Benefits:
+
+backend doesn’t handle big file streams
+
+no memory/cpu load
+
+super scalable
+
+Approach B) Multipart upload via Spring Boot (Simple + Production-safe)
+
+Frontend uploads file to your backend.
+Backend validates + uploads to S3.
+
+✅ Benefits:
+
+easy for beginners
+
+backend can compress, watermark, scan virus before upload
