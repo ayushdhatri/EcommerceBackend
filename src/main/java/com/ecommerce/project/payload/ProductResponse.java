@@ -58,6 +58,7 @@ public class ProductResponse {
     }
 
 
-
-
+    public void setPagesize(int i) {
+        this.pageSize = i;
+    }
 }

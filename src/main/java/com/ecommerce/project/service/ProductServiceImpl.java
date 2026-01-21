@@ -82,6 +82,10 @@ public class ProductServiceImpl implements ProductService{
       }).toList();
       ProductResponse productResponse = new ProductResponse();
       productResponse.setContent(savedProductDTO);
+      productResponse.setPageNumber(productPage.getNumber());
+      productResponse.setPagesize(productPage.getSize());
+      productResponse.setTotalElements(productPage.getTotalElements());
+      productResponse.setLastPage(productPage.isLast());
       return productResponse;
     }
 
@@ -102,6 +106,10 @@ public class ProductServiceImpl implements ProductService{
                 }).toList();
         ProductResponse productResponse = new ProductResponse();
         productResponse.setContent(savedProductDTO);
+        productResponse.setPageNumber(productPage.getNumber());
+        productResponse.setPagesize(productPage.getSize());
+        productResponse.setTotalElements(productPage.getTotalElements());
+        productResponse.setLastPage(productPage.isLast());
         return productResponse;
 
 
