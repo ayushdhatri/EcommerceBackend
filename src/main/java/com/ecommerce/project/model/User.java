@@ -17,11 +17,13 @@ public class User {
 
     @NotBlank
     @Size(max = 20)
+    @Column(name = "username", unique = true)
     private String userName;
 
     @NotBlank
     @Size(max = 50)
     @Email
+    @Column(name = "email", unique = true)
     private String email;
 
     @NotBlank
