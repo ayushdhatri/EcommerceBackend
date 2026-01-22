@@ -37,6 +37,12 @@ public class User {
                inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "user",
+                cascade = {CascadeType.MERGE,CascadeType.PERSIST},
+                orphanRemoval = true)
+    private Set<Product> products;
+
+
     public User(){
 
     }
