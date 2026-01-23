@@ -182,4 +182,4 @@ easy for beginners
 backend can compress, watermark, scan virus before upload
 
 
-From now onwards will start with
+From now onwards will start with custom authentication for our product
