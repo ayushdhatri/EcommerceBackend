@@ -63,6 +63,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/swagger-ui/**").permitAll()
                                 .requestMatchers("/api/admin/**").permitAll()
                                 .requestMatchers("/api/test/**").permitAll()
+                                .requestMatchers("/h2-console").permitAll()
                                 .anyRequest().authenticated());
 
                 http.authenticationProvider(authenticationProvider());
@@ -78,7 +79,8 @@ public class WebSecurityConfig {
                 "/swagger-resources/**",
                 "/configuration/security",
                 "/swagger-ui.html",
-                "/webjars/**"
+                "/webjars/**",
+                "/h2-console"
         ));
     }
 
