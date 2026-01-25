@@ -11,6 +11,7 @@ import com.ecommerce.project.payload.ProductDTO;
 import com.ecommerce.project.repositories.CartItemRepository;
 import com.ecommerce.project.repositories.CartRepository;
 import com.ecommerce.project.repositories.ProductRepository;
+import com.ecommerce.project.util.AuthUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,6 +80,23 @@ public class CartServiceImpl implements CartService{
         cartDTO.setProducts(cartProducts);
         return cartDTO;
 
+    }
+
+    @Override
+    public List<CartDTO> getAllCarts() {
+         List<Cart> carts = cartRepository.findAll();
+         if(carts.size() == 0){
+             throw new APIException("No Cart Exist");
+         }
+         List<CartDTO> cartDTOS = carts.stream().map((cart)->{
+             CartDTO cartDTO = modelMapper.map(cart,CartDTO.class);
+             List<ProductDTO> productDTOS = cart.getCartItems().stream()
+                     .map(p -> modelMapper.map(p.getProduct(), ProductDTO.class)).toList();
+             cartDTO.setProducts(productDTOS);
+             return cartDTO;
+
+         }).toList();
+         return cartDTOS;
     }
 
     private Cart createCart(){

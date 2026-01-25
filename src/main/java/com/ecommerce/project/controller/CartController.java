@@ -6,10 +6,9 @@ import com.ecommerce.project.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/carts")
@@ -19,15 +18,17 @@ public class CartController {
     CartService cartService;
     @PostMapping("/carts/products/{productId}/quantity/{quantity}")
     public ResponseEntity<CartDTO> addProductToCart(@PathVariable Long productId, @PathVariable Integer quantity){
-        // case 1 : if you have already cart existing
-        // case 2 : if dont have any cart existing
-
         CartDTO cartDTO = cartService.addProductToCart(productId, quantity);
         return new ResponseEntity<>(cartDTO, HttpStatus.CREATED);
+    }
 
-
+    @GetMapping("/carts")
+    public ResponseEntity<List<CartDTO>> getCarts(){
+        List<CartDTO> cartDTOS = cartService.getAllCarts();
+        return new ResponseEntity<>(cartDTOS, HttpStatus.FOUND);
 
     }
+
 
 
 
