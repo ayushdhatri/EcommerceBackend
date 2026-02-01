@@ -6,6 +6,7 @@ import com.ecommerce.project.exception.ResourceNotFoundException;
 import com.ecommerce.project.model.Cart;
 import com.ecommerce.project.model.CartItem;
 import com.ecommerce.project.model.Product;
+import com.ecommerce.project.model.User;
 import com.ecommerce.project.payload.CartDTO;
 import com.ecommerce.project.payload.ProductDTO;
 import com.ecommerce.project.repositories.CartItemRepository;
@@ -96,6 +97,31 @@ public class CartServiceImpl implements CartService{
             return cartDTO;
 
         }).toList();
+    }
+
+    @Override
+    public CartDTO getUserCart() {
+
+        // we need to fetch the details of loggedIn user
+        User loggedInuser = authUtil.loggedInUser();
+        // from user fetch the details of cart
+        Cart userCart = cartRepository.findCartByEmail(loggedInuser.getEmail());
+        if(userCart == null){
+            throw new APIException("No Item added in cart! Cart is Empty!");
+        }
+        CartDTO userCartDTO = new CartDTO();
+        List<CartItem> cartItems = userCart.getCartItems();
+        cartItems.forEach(cartItem -> cartItem.getProduct().setQuantity(cartItem.getQuantity()));
+        List<ProductDTO> productDTOS = cartItems.stream()
+                        .map((c)->{
+                            return modelMapper.map(c.getProduct(),ProductDTO.class);
+                        }).toList();
+
+
+        userCartDTO.setCartId(userCart.getCartId());
+        userCartDTO.setProducts(productDTOS);
+        return userCartDTO;
+
     }
 
     private Cart createCart(){

@@ -29,6 +29,13 @@ public class CartController {
 
     }
 
+    @GetMapping("/user/cart")
+    public ResponseEntity<CartDTO> getUserCart(){
+        CartDTO userCart = cartService.getUserCart();
+        return new ResponseEntity<>(userCart, HttpStatus.OK);
+
+    }
+
 
 
 
