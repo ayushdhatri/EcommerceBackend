@@ -44,10 +44,7 @@ public class User {
                 orphanRemoval = true)
     private Set<Product> products;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    @JoinTable(name = "user_address",
-    joinColumns = @JoinColumn(name = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "address_id"))
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private List<Address> addresses = new ArrayList<>();
 
     @OneToOne(mappedBy = "user",cascade = {CascadeType.PERSIST,CascadeType.MERGE})
@@ -99,5 +96,13 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
     }
 }
