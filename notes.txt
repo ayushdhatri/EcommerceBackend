@@ -183,3 +183,6 @@ backend can compress, watermark, scan virus before upload
 
 
 From now onwards will start with custom authentication for our product
+
+
+Start implementating Order and Payments in our application
