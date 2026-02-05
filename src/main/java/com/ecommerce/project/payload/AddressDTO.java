@@ -7,6 +7,15 @@ public class AddressDTO {
     private String city;
     private String state;
     private String country;
+    private String pincode;
+
+    public String getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(String pincode) {
+        this.pincode = pincode;
+    }
 
     public Long getAddressId() {
         return addressId;
