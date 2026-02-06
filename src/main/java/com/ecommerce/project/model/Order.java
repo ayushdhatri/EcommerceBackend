@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +34,7 @@ public class Order {
 
     private Double totalAmount;
 
-    private Double orderStatus;
+    private String orderStatus;
 
     public Long getOrderId() {
         return orderId;
@@ -91,11 +92,11 @@ public class Order {
         this.totalAmount = totalAmount;
     }
 
-    public Double getOrderStatus() {
+    public String getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(Double orderStatus) {
+    public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
     }
 }
