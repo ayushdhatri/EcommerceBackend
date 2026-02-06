@@ -22,7 +22,7 @@ public class Payment {
     private String pgStatus;
     private String pgResponseMessage;
     private String pgName;
-xw
+
     public Payment(Long paymentId, String pgPaymentId, String pgStatus, String pgResponseMessage, String pgName){
         this.paymentId = paymentId;
         this.pgPaymentId = pgPaymentId;
